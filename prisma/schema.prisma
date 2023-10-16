@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  main_image  String
+  images      String[]
+  description String
+  close_time  String
+  open_time   String
+  slug        String   @unique
+  price       PRICE
+  items       Item[]
+  review      Review[]
+  booking     Booking[]
+  table       Int @default(4)
+  location    Location @relation(fields: [location_id], references: [id])
+  location_id String   @db.ObjectId
+  cuisine     Cuisine  @relation(fields: [cuisine_id], references: [id])
+  cuisine_id  String   @db.ObjectId
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Item {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  price         String
+  description   String
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  restaurant_id String     @db.ObjectId
+  created_at    DateTime   @default(now())
+}
+
+model Location {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  restaurants Restaurant[]
+  created_at  DateTime     @default(now())
+}
+
+model Cuisine {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  restaurants Restaurant[]
+  created_at  DateTime     @default(now())
+}
+
+model Review {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  first_name    String
+  last_name     String
+  text          String
+  rating        Int
+  restaurant_id String     @db.ObjectId
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  user_id       String     @db.ObjectId
+  user          User       @relation(fields: [user_id], references: [id])
+  created_at    DateTime   @default(now())
+}
+
+model User {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  first_name String
+  last_name  String
+  email      String   @unique
+  city       String
+  password   String
+  phone      String
+  review     Review[]
+  created_at DateTime @default(now())
+}
+
+model Booking {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  booking_date String
+  booking_time String
+  booker_email String
+  booker_phone String
+  booker_name  String
+  booker_request  String
+  no_of_table Int
+  party_size   Int
+  slug         String
+  restaurant_id String     @db.ObjectId
+  restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+  created_at   DateTime @default(now())
+}
+// model Table {
+//   id           String   @id @default(auto()) @map("_id") @db.ObjectId 
+//   table_number  Int
+//   restaurant_id String     @db.ObjectId
+//   restaurant    Restaurant @relation(fields: [restaurant_id], references: [id])
+// }
+
+enum PRICE {
+  CHEAP
+  REGULAR
+  EXPENSIVE
+}
