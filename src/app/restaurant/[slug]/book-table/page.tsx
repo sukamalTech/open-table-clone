@@ -11,7 +11,7 @@ import { printDisplayDate, printDisplayTime } from "@/helper/print-display-time"
 import LoadingAlert, { State } from "@/components/loading-alert";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
+ const metadata: Metadata = {
   title: 'OpenTableClone | Book Table',
   description: 'Best Restaurant App',
 }

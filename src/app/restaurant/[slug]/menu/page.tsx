@@ -4,7 +4,7 @@ import { Item, PrismaClient } from '@prisma/client'
 import Link from 'next/link'
 const prisma=new PrismaClient()
 
-export const metadata: Metadata = {
+ const metadata: Metadata = {
   title: 'OpenTableClone | Menu',
   description: 'Best Restaurant App',
 }
